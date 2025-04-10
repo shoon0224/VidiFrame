@@ -1,0 +1,51 @@
+# MARK: - Xcode
+DerivedData/
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+*.xcuserstate
+*.xccheckout
+*.xcscmblueprint
+*.xcworkspace/contents.xcworkspacedata
+*.xcodeproj/xcuserdata/
+xcuserdata/
+
+# MARK: - Swift Package Manager
+.build/
+.swiftpm/
+Packages/
+.swiftpm/xcode/package.xcworkspace/
+
+# MARK: - CocoaPods
+Pods/
+Podfile.lock
+
+# MARK: - Carthage
+Carthage/
+
+# MARK: - Fastlane
+fastlane/report.xml
+fastlane/screenshots/
+fastlane/test_output/
+
+# MARK: - Archives
+*.xcarchive
+
+# MARK: - macOS
+.DS_Store
+
+# MARK: - Editor & Merge Conflicts
+*.moved-aside
+*.swp
+*.lock
+*.orig
+*.tmp
+
+# MARK: - JetBrains IDE
+.idea/

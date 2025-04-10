@@ -1,0 +1,497 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		690006E35B22EBA7604F4344 /* Pods_VidiFrame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02BA8BC6C825B36A4F2ED744 /* Pods_VidiFrame.framework */; };
+		CA8B96532DA81AA200E0DF4C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CA8B964B2DA81AA200E0DF4C /* Assets.xcassets */; };
+		CA8B96552DA81AA200E0DF4C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA8B964F2DA81AA200E0DF4C /* LaunchScreen.storyboard */; };
+		CA8B96562DA81AA200E0DF4C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B964A2DA81AA200E0DF4C /* AppDelegate.swift */; };
+		CA8B96572DA81AA200E0DF4C /* UIScreen+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B964C2DA81AA200E0DF4C /* UIScreen+Extension.swift */; };
+		CA8B96582DA81AA200E0DF4C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B96502DA81AA200E0DF4C /* SceneDelegate.swift */; };
+		CA8B96592DA81AA200E0DF4C /* VideoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B96512DA81AA200E0DF4C /* VideoListViewController.swift */; };
+		CA8B96612DA81B7100E0DF4C /* VideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B96602DA81B6B00E0DF4C /* VideoCell.swift */; };
+		CA8B96632DA81BD800E0DF4C /* VideoListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B96622DA81BD000E0DF4C /* VideoListViewModel.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		02BA8BC6C825B36A4F2ED744 /* Pods_VidiFrame.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VidiFrame.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		60AC75071F9ED66B7B48CC17 /* Pods-VidiFrame.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VidiFrame.release.xcconfig"; path = "Target Support Files/Pods-VidiFrame/Pods-VidiFrame.release.xcconfig"; sourceTree = "<group>"; };
+		CA8B964A2DA81AA200E0DF4C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		CA8B964B2DA81AA200E0DF4C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		CA8B964C2DA81AA200E0DF4C /* UIScreen+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen+Extension.swift"; sourceTree = "<group>"; };
+		CA8B964D2DA81AA200E0DF4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CA8B964E2DA81AA200E0DF4C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		CA8B96502DA81AA200E0DF4C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		CA8B96512DA81AA200E0DF4C /* VideoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListViewController.swift; sourceTree = "<group>"; };
+		CA8B96602DA81B6B00E0DF4C /* VideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCell.swift; sourceTree = "<group>"; };
+		CA8B96622DA81BD000E0DF4C /* VideoListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListViewModel.swift; sourceTree = "<group>"; };
+		CA9BA9B32D5CEDCD0052BEC2 /* VidiFrame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VidiFrame.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EADB72916A96E72207F68AC3 /* Pods-VidiFrame.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VidiFrame.debug.xcconfig"; path = "Target Support Files/Pods-VidiFrame/Pods-VidiFrame.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CA9BA9B02D5CEDCD0052BEC2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				690006E35B22EBA7604F4344 /* Pods_VidiFrame.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B2527C97315F033A11BA1358 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				02BA8BC6C825B36A4F2ED744 /* Pods_VidiFrame.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CA8B96522DA81AA200E0DF4C /* VidiFrame */ = {
+			isa = PBXGroup;
+			children = (
+				CA8B964A2DA81AA200E0DF4C /* AppDelegate.swift */,
+				CA8B96502DA81AA200E0DF4C /* SceneDelegate.swift */,
+				CA8B964D2DA81AA200E0DF4C /* Info.plist */,
+				CA8B964B2DA81AA200E0DF4C /* Assets.xcassets */,
+				CA8B964F2DA81AA200E0DF4C /* LaunchScreen.storyboard */,
+				CA8B965A2DA81AC700E0DF4C /* extension */,
+				CA8B965B2DA81AF400E0DF4C /* Presentation */,
+			);
+			path = VidiFrame;
+			sourceTree = "<group>";
+		};
+		CA8B965A2DA81AC700E0DF4C /* extension */ = {
+			isa = PBXGroup;
+			children = (
+				CA8B964C2DA81AA200E0DF4C /* UIScreen+Extension.swift */,
+			);
+			path = extension;
+			sourceTree = "<group>";
+		};
+		CA8B965B2DA81AF400E0DF4C /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				CA8B965C2DA81B0200E0DF4C /* VideoList */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		CA8B965C2DA81B0200E0DF4C /* VideoList */ = {
+			isa = PBXGroup;
+			children = (
+				CA8B965D2DA81B2100E0DF4C /* View */,
+				CA8B965E2DA81B2B00E0DF4C /* ViewModel */,
+				CA8B965F2DA81B4300E0DF4C /* Model */,
+			);
+			path = VideoList;
+			sourceTree = "<group>";
+		};
+		CA8B965D2DA81B2100E0DF4C /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CA8B96512DA81AA200E0DF4C /* VideoListViewController.swift */,
+				CA8B96602DA81B6B00E0DF4C /* VideoCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		CA8B965E2DA81B2B00E0DF4C /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				CA8B96622DA81BD000E0DF4C /* VideoListViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		CA8B965F2DA81B4300E0DF4C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		CA9BA9AA2D5CEDCD0052BEC2 = {
+			isa = PBXGroup;
+			children = (
+				CA8B96522DA81AA200E0DF4C /* VidiFrame */,
+				CA9BA9B42D5CEDCD0052BEC2 /* Products */,
+				CCDDC8795A2376C51150A7E7 /* Pods */,
+				B2527C97315F033A11BA1358 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		CA9BA9B42D5CEDCD0052BEC2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CA9BA9B32D5CEDCD0052BEC2 /* VidiFrame.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CCDDC8795A2376C51150A7E7 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				EADB72916A96E72207F68AC3 /* Pods-VidiFrame.debug.xcconfig */,
+				60AC75071F9ED66B7B48CC17 /* Pods-VidiFrame.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CA9BA9B22D5CEDCD0052BEC2 /* VidiFrame */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CA9BA9C62D5CEDCE0052BEC2 /* Build configuration list for PBXNativeTarget "VidiFrame" */;
+			buildPhases = (
+				DE987950745555C5F96A2735 /* [CP] Check Pods Manifest.lock */,
+				CA9BA9AF2D5CEDCD0052BEC2 /* Sources */,
+				CA9BA9B02D5CEDCD0052BEC2 /* Frameworks */,
+				CA9BA9B12D5CEDCD0052BEC2 /* Resources */,
+				F0DC1F4B3A5856B7FF6A9ECD /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VidiFrame;
+			productName = VidiFrame;
+			productReference = CA9BA9B32D5CEDCD0052BEC2 /* VidiFrame.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CA9BA9AB2D5CEDCD0052BEC2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1620;
+				LastUpgradeCheck = 1620;
+				TargetAttributes = {
+					CA9BA9B22D5CEDCD0052BEC2 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+				};
+			};
+			buildConfigurationList = CA9BA9AE2D5CEDCD0052BEC2 /* Build configuration list for PBXProject "VidiFrame" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = CA9BA9AA2D5CEDCD0052BEC2;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = CA9BA9B42D5CEDCD0052BEC2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CA9BA9B22D5CEDCD0052BEC2 /* VidiFrame */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CA9BA9B12D5CEDCD0052BEC2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CA8B96532DA81AA200E0DF4C /* Assets.xcassets in Resources */,
+				CA8B96552DA81AA200E0DF4C /* LaunchScreen.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		DE987950745555C5F96A2735 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VidiFrame-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F0DC1F4B3A5856B7FF6A9ECD /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VidiFrame/Pods-VidiFrame-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VidiFrame/Pods-VidiFrame-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VidiFrame/Pods-VidiFrame-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CA9BA9AF2D5CEDCD0052BEC2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CA8B96612DA81B7100E0DF4C /* VideoCell.swift in Sources */,
+				CA8B96562DA81AA200E0DF4C /* AppDelegate.swift in Sources */,
+				CA8B96632DA81BD800E0DF4C /* VideoListViewModel.swift in Sources */,
+				CA8B96572DA81AA200E0DF4C /* UIScreen+Extension.swift in Sources */,
+				CA8B96582DA81AA200E0DF4C /* SceneDelegate.swift in Sources */,
+				CA8B96592DA81AA200E0DF4C /* VideoListViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		CA8B964F2DA81AA200E0DF4C /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				CA8B964E2DA81AA200E0DF4C /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		CA9BA9C72D5CEDCE0052BEC2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EADB72916A96E72207F68AC3 /* Pods-VidiFrame.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = W6SXRBR67B;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = VidiFrame/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = VidiFrame;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sanghoon.vidiframe;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CA9BA9C82D5CEDCE0052BEC2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 60AC75071F9ED66B7B48CC17 /* Pods-VidiFrame.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = W6SXRBR67B;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = VidiFrame/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = VidiFrame;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sanghoon.vidiframe;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		CA9BA9C92D5CEDCE0052BEC2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		CA9BA9CA2D5CEDCE0052BEC2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CA9BA9AE2D5CEDCD0052BEC2 /* Build configuration list for PBXProject "VidiFrame" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CA9BA9C92D5CEDCE0052BEC2 /* Debug */,
+				CA9BA9CA2D5CEDCE0052BEC2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CA9BA9C62D5CEDCE0052BEC2 /* Build configuration list for PBXNativeTarget "VidiFrame" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CA9BA9C72D5CEDCE0052BEC2 /* Debug */,
+				CA9BA9C82D5CEDCE0052BEC2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CA9BA9AB2D5CEDCD0052BEC2 /* Project object */;
+}
