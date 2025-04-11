@@ -47,4 +47,23 @@ class VideoListViewModel {
     func numberOfVideos() -> Int {
         return videoURLs.count
     }
+    
+    func saveVideo(_ sourceURL: URL, completion: (() -> Void)? = nil) {
+        let fileManager = FileManager.default
+        guard let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+
+        let destinationURL = documentsDirectory.appendingPathComponent(sourceURL.lastPathComponent)
+
+        do {
+            if fileManager.fileExists(atPath: destinationURL.path) {
+                print("파일 이미 존재함: \(destinationURL.lastPathComponent)")
+            } else {
+                try fileManager.copyItem(at: sourceURL, to: destinationURL)
+                videoURLs.append(destinationURL)
+            }
+            completion?()
+        } catch {
+            print("파일 저장 실패: \(error)")
+        }
+    }
 }

@@ -16,6 +16,8 @@
 		CA8B96592DA81AA200E0DF4C /* VideoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B96512DA81AA200E0DF4C /* VideoListViewController.swift */; };
 		CA8B96612DA81B7100E0DF4C /* VideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B96602DA81B6B00E0DF4C /* VideoCell.swift */; };
 		CA8B96632DA81BD800E0DF4C /* VideoListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B96622DA81BD000E0DF4C /* VideoListViewModel.swift */; };
+		CA8B96692DA9816800E0DF4C /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B96682DA9816000E0DF4C /* CALayer+Extension.swift */; };
+		CA8B966B2DA9827100E0DF4C /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B966A2DA9826800E0DF4C /* UIButton+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +32,8 @@
 		CA8B96512DA81AA200E0DF4C /* VideoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListViewController.swift; sourceTree = "<group>"; };
 		CA8B96602DA81B6B00E0DF4C /* VideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCell.swift; sourceTree = "<group>"; };
 		CA8B96622DA81BD000E0DF4C /* VideoListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListViewModel.swift; sourceTree = "<group>"; };
+		CA8B96682DA9816000E0DF4C /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
+		CA8B966A2DA9826800E0DF4C /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		CA9BA9B32D5CEDCD0052BEC2 /* VidiFrame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VidiFrame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EADB72916A96E72207F68AC3 /* Pods-VidiFrame.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VidiFrame.debug.xcconfig"; path = "Target Support Files/Pods-VidiFrame/Pods-VidiFrame.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -71,6 +75,8 @@
 		CA8B965A2DA81AC700E0DF4C /* extension */ = {
 			isa = PBXGroup;
 			children = (
+				CA8B966A2DA9826800E0DF4C /* UIButton+Extension.swift */,
+				CA8B96682DA9816000E0DF4C /* CALayer+Extension.swift */,
 				CA8B964C2DA81AA200E0DF4C /* UIScreen+Extension.swift */,
 			);
 			path = extension;
@@ -262,8 +268,10 @@
 			files = (
 				CA8B96612DA81B7100E0DF4C /* VideoCell.swift in Sources */,
 				CA8B96562DA81AA200E0DF4C /* AppDelegate.swift in Sources */,
+				CA8B96692DA9816800E0DF4C /* CALayer+Extension.swift in Sources */,
 				CA8B96632DA81BD800E0DF4C /* VideoListViewModel.swift in Sources */,
 				CA8B96572DA81AA200E0DF4C /* UIScreen+Extension.swift in Sources */,
+				CA8B966B2DA9827100E0DF4C /* UIButton+Extension.swift in Sources */,
 				CA8B96582DA81AA200E0DF4C /* SceneDelegate.swift in Sources */,
 				CA8B96592DA81AA200E0DF4C /* VideoListViewController.swift in Sources */,
 			);
