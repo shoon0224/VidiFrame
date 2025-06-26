@@ -15,7 +15,7 @@ import Foundation
  * - UI와 비즈니스 로직 분리를 위한 인터페이스 제공
  * - 테스트 가능성을 위한 프로토콜 기반 설계
  */
-protocol VideoListViewModelProtocol {
+protocol VideoListViewModelProtocol: AnyObject {
     // MARK: - Properties
     
     /// 현재 로드된 비디오 목록

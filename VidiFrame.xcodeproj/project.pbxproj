@@ -8,17 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		690006E35B22EBA7604F4344 /* Pods_VidiFrame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02BA8BC6C825B36A4F2ED744 /* Pods_VidiFrame.framework */; };
+		CA0DE1972E0DBAC300F97060 /* VideoDocumentPickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0DE1922E0DBAC300F97060 /* VideoDocumentPickerManager.swift */; };
+		CA0DE1982E0DBAC300F97060 /* VideoProgressManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0DE1952E0DBAC300F97060 /* VideoProgressManager.swift */; };
+		CA0DE1992E0DBAC300F97060 /* ThumbnailCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0DE1912E0DBAC300F97060 /* ThumbnailCacheManager.swift */; };
+		CA0DE19A2E0DBAC300F97060 /* ThumbnailSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0DE18E2E0DBAC300F97060 /* ThumbnailSelectionViewController.swift */; };
+		CA0DE19B2E0DBAC300F97060 /* VideoListTableManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0DE1932E0DBAC300F97060 /* VideoListTableManager.swift */; };
+		CA0DE19C2E0DBAC300F97060 /* VideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0DE18C2E0DBAC300F97060 /* VideoCell.swift */; };
+		CA0DE19D2E0DBAC300F97060 /* VideoOptionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0DE1942E0DBAC300F97060 /* VideoOptionsManager.swift */; };
+		CA0DE19E2E0DBAC300F97060 /* VideoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0DE18F2E0DBAC300F97060 /* VideoListViewController.swift */; };
 		CA8B96532DA81AA200E0DF4C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CA8B964B2DA81AA200E0DF4C /* Assets.xcassets */; };
 		CA8B96552DA81AA200E0DF4C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA8B964F2DA81AA200E0DF4C /* LaunchScreen.storyboard */; };
 		CA8B96562DA81AA200E0DF4C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B964A2DA81AA200E0DF4C /* AppDelegate.swift */; };
 		CA8B96572DA81AA200E0DF4C /* UIScreen+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B964C2DA81AA200E0DF4C /* UIScreen+Extension.swift */; };
 		CA8B96582DA81AA200E0DF4C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B96502DA81AA200E0DF4C /* SceneDelegate.swift */; };
-		CA8B96592DA81AA200E0DF4C /* VideoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B96512DA81AA200E0DF4C /* VideoListViewController.swift */; };
-		CA8B96612DA81B7100E0DF4C /* VideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B96602DA81B6B00E0DF4C /* VideoCell.swift */; };
 		CA8B96632DA81BD800E0DF4C /* VideoListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B96622DA81BD000E0DF4C /* VideoListViewModel.swift */; };
 		CA8B96642DA81BE000E0DF4C /* VideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B96632DA81BE000E0DF4C /* VideoModel.swift */; };
-		CA8B96652DA81BE800E0DF4C /* ThumbnailCacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B96642DA81BE800E0DF4C /* ThumbnailCacheManager.swift */; };
-		CA8B96662DA81BF000E0DF4C /* ThumbnailSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B96652DA81BF000E0DF4C /* ThumbnailSelectionViewController.swift */; };
 		CA8B96692DA9816800E0DF4C /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B96682DA9816000E0DF4C /* CALayer+Extension.swift */; };
 		CA8B966B2DA9827100E0DF4C /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B966A2DA9826800E0DF4C /* UIButton+Extension.swift */; };
 /* End PBXBuildFile section */
@@ -26,18 +30,22 @@
 /* Begin PBXFileReference section */
 		02BA8BC6C825B36A4F2ED744 /* Pods_VidiFrame.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VidiFrame.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60AC75071F9ED66B7B48CC17 /* Pods-VidiFrame.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VidiFrame.release.xcconfig"; path = "Target Support Files/Pods-VidiFrame/Pods-VidiFrame.release.xcconfig"; sourceTree = "<group>"; };
+		CA0DE18C2E0DBAC300F97060 /* VideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCell.swift; sourceTree = "<group>"; };
+		CA0DE18E2E0DBAC300F97060 /* ThumbnailSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailSelectionViewController.swift; sourceTree = "<group>"; };
+		CA0DE18F2E0DBAC300F97060 /* VideoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListViewController.swift; sourceTree = "<group>"; };
+		CA0DE1912E0DBAC300F97060 /* ThumbnailCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailCacheManager.swift; sourceTree = "<group>"; };
+		CA0DE1922E0DBAC300F97060 /* VideoDocumentPickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDocumentPickerManager.swift; sourceTree = "<group>"; };
+		CA0DE1932E0DBAC300F97060 /* VideoListTableManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListTableManager.swift; sourceTree = "<group>"; };
+		CA0DE1942E0DBAC300F97060 /* VideoOptionsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoOptionsManager.swift; sourceTree = "<group>"; };
+		CA0DE1952E0DBAC300F97060 /* VideoProgressManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoProgressManager.swift; sourceTree = "<group>"; };
 		CA8B964A2DA81AA200E0DF4C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CA8B964B2DA81AA200E0DF4C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CA8B964C2DA81AA200E0DF4C /* UIScreen+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen+Extension.swift"; sourceTree = "<group>"; };
 		CA8B964D2DA81AA200E0DF4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CA8B964E2DA81AA200E0DF4C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CA8B96502DA81AA200E0DF4C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		CA8B96512DA81AA200E0DF4C /* VideoListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListViewController.swift; sourceTree = "<group>"; };
-		CA8B96602DA81B6B00E0DF4C /* VideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCell.swift; sourceTree = "<group>"; };
 		CA8B96622DA81BD000E0DF4C /* VideoListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoListViewModel.swift; sourceTree = "<group>"; };
 		CA8B96632DA81BE000E0DF4C /* VideoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoModel.swift; sourceTree = "<group>"; };
-		CA8B96642DA81BE800E0DF4C /* ThumbnailCacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailCacheManager.swift; sourceTree = "<group>"; };
-		CA8B96652DA81BF000E0DF4C /* ThumbnailSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThumbnailSelectionViewController.swift; sourceTree = "<group>"; };
 		CA8B96682DA9816000E0DF4C /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
 		CA8B966A2DA9826800E0DF4C /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
 		CA9BA9B32D5CEDCD0052BEC2 /* VidiFrame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VidiFrame.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -62,6 +70,35 @@
 				02BA8BC6C825B36A4F2ED744 /* Pods_VidiFrame.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CA0DE18D2E0DBAC300F97060 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				CA0DE18C2E0DBAC300F97060 /* VideoCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		CA0DE1902E0DBAC300F97060 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				CA0DE18E2E0DBAC300F97060 /* ThumbnailSelectionViewController.swift */,
+				CA0DE18F2E0DBAC300F97060 /* VideoListViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		CA0DE1962E0DBAC300F97060 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				CA0DE1912E0DBAC300F97060 /* ThumbnailCacheManager.swift */,
+				CA0DE1922E0DBAC300F97060 /* VideoDocumentPickerManager.swift */,
+				CA0DE1932E0DBAC300F97060 /* VideoListTableManager.swift */,
+				CA0DE1942E0DBAC300F97060 /* VideoOptionsManager.swift */,
+				CA0DE1952E0DBAC300F97060 /* VideoProgressManager.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 		CA8B96522DA81AA200E0DF4C /* VidiFrame */ = {
@@ -101,10 +138,9 @@
 		CA8B965D2DA81B2100E0DF4C /* View */ = {
 			isa = PBXGroup;
 			children = (
-				CA8B96512DA81AA200E0DF4C /* VideoListViewController.swift */,
-				CA8B96602DA81B6B00E0DF4C /* VideoCell.swift */,
-				CA8B96642DA81BE800E0DF4C /* ThumbnailCacheManager.swift */,
-				CA8B96652DA81BF000E0DF4C /* ThumbnailSelectionViewController.swift */,
+				CA0DE18D2E0DBAC300F97060 /* Cells */,
+				CA0DE1902E0DBAC300F97060 /* Controllers */,
+				CA0DE1962E0DBAC300F97060 /* Managers */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -267,17 +303,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CA8B96612DA81B7100E0DF4C /* VideoCell.swift in Sources */,
 				CA8B96562DA81AA200E0DF4C /* AppDelegate.swift in Sources */,
 				CA8B96692DA9816800E0DF4C /* CALayer+Extension.swift in Sources */,
 				CA8B96632DA81BD800E0DF4C /* VideoListViewModel.swift in Sources */,
 				CA8B96642DA81BE000E0DF4C /* VideoModel.swift in Sources */,
-				CA8B96652DA81BE800E0DF4C /* ThumbnailCacheManager.swift in Sources */,
-				CA8B96662DA81BF000E0DF4C /* ThumbnailSelectionViewController.swift in Sources */,
 				CA8B96572DA81AA200E0DF4C /* UIScreen+Extension.swift in Sources */,
 				CA8B966B2DA9827100E0DF4C /* UIButton+Extension.swift in Sources */,
 				CA8B96582DA81AA200E0DF4C /* SceneDelegate.swift in Sources */,
-				CA8B96592DA81AA200E0DF4C /* VideoListViewController.swift in Sources */,
+				CA0DE1972E0DBAC300F97060 /* VideoDocumentPickerManager.swift in Sources */,
+				CA0DE1982E0DBAC300F97060 /* VideoProgressManager.swift in Sources */,
+				CA0DE1992E0DBAC300F97060 /* ThumbnailCacheManager.swift in Sources */,
+				CA0DE19A2E0DBAC300F97060 /* ThumbnailSelectionViewController.swift in Sources */,
+				CA0DE19B2E0DBAC300F97060 /* VideoListTableManager.swift in Sources */,
+				CA0DE19C2E0DBAC300F97060 /* VideoCell.swift in Sources */,
+				CA0DE19D2E0DBAC300F97060 /* VideoOptionsManager.swift in Sources */,
+				CA0DE19E2E0DBAC300F97060 /* VideoListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
