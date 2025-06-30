@@ -26,7 +26,6 @@ class VideoDocumentPickerManager: NSObject {
     // MARK: - Initialization
     
     /**
-     * 초기화자
      * @param viewModel 비디오 파일을 추가할 뷰모델
      * @param presentingViewController 문서 피커를 표시할 뷰컨트롤러
      */

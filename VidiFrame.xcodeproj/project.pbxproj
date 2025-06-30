@@ -25,6 +25,7 @@
 		CA8B96642DA81BE000E0DF4C /* VideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B96632DA81BE000E0DF4C /* VideoModel.swift */; };
 		CA8B96692DA9816800E0DF4C /* CALayer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B96682DA9816000E0DF4C /* CALayer+Extension.swift */; };
 		CA8B966B2DA9827100E0DF4C /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8B966A2DA9826800E0DF4C /* UIButton+Extension.swift */; };
+		CA993A7D2E128826004C3AFA /* CustomVideoPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA993A7C2E128826004C3AFA /* CustomVideoPlayerViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		CA8B96632DA81BE000E0DF4C /* VideoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoModel.swift; sourceTree = "<group>"; };
 		CA8B96682DA9816000E0DF4C /* CALayer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+Extension.swift"; sourceTree = "<group>"; };
 		CA8B966A2DA9826800E0DF4C /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
+		CA993A7C2E128826004C3AFA /* CustomVideoPlayerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomVideoPlayerViewController.swift; sourceTree = "<group>"; };
 		CA9BA9B32D5CEDCD0052BEC2 /* VidiFrame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VidiFrame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EADB72916A96E72207F68AC3 /* Pods-VidiFrame.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VidiFrame.debug.xcconfig"; path = "Target Support Files/Pods-VidiFrame/Pods-VidiFrame.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -83,6 +85,7 @@
 		CA0DE1902E0DBAC300F97060 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				CA993A7C2E128826004C3AFA /* CustomVideoPlayerViewController.swift */,
 				CA0DE18E2E0DBAC300F97060 /* ThumbnailSelectionViewController.swift */,
 				CA0DE18F2E0DBAC300F97060 /* VideoListViewController.swift */,
 			);
@@ -287,9 +290,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-VidiFrame/Pods-VidiFrame-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-VidiFrame/Pods-VidiFrame-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -317,6 +324,7 @@
 				CA0DE19B2E0DBAC300F97060 /* VideoListTableManager.swift in Sources */,
 				CA0DE19C2E0DBAC300F97060 /* VideoCell.swift in Sources */,
 				CA0DE19D2E0DBAC300F97060 /* VideoOptionsManager.swift in Sources */,
+				CA993A7D2E128826004C3AFA /* CustomVideoPlayerViewController.swift in Sources */,
 				CA0DE19E2E0DBAC300F97060 /* VideoListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

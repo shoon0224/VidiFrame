@@ -155,8 +155,7 @@ class VideoListViewController: UIViewController {
         }
         
         tableManager.onVideoSelected = { [weak self] index in
-            // TODO: 비디오 재생 기능 구현
-            print("비디오 선택됨: \(index)")
+            self?.playVideo(at: index)
         }
         
         // 옵션 매니저 콜백
@@ -309,4 +308,26 @@ class VideoListViewController: UIViewController {
     @objc private func addFileButtonTapped() {
         documentPickerManager.presentDocumentPicker()
     }
+    
+    // MARK: - Video Playback
+    
+    /**
+     * 지정된 인덱스의 비디오를 커스텀 플레이어로 재생합니다
+     * @param index 재생할 비디오의 인덱스
+     */
+    private func playVideo(at index: Int) {
+        guard let video = viewModel.video(at: index) else {
+            showErrorAlert(message: "비디오를 찾을 수 없습니다.")
+            return
+        }
+        
+        // 커스텀 비디오 플레이어 생성 및 표시
+        let customPlayer = CustomVideoPlayerViewController(
+            videoURL: video.url,
+            title: video.name
+        )
+        
+        present(customPlayer, animated: true)
+    }
+
 }
