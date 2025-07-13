@@ -303,10 +303,35 @@ class VideoListViewController: UIViewController {
     
     /**
      * 파일 추가 버튼 탭 시 호출
-     * 문서 피커 매니저를 통해 비디오 파일 선택 화면 표시
+     * 사용자가 파일 목록 또는 사진첩에서 비디오를 선택할 수 있는 옵션 표시
      */
     @objc private func addFileButtonTapped() {
-        documentPickerManager.presentDocumentPicker()
+        let alertController = UIAlertController(
+            title: "비디오 추가",
+            message: "파일과 앨범 중에서 선택",
+            preferredStyle: .actionSheet
+        )
+        
+        // 파일 목록에서 선택
+        alertController.addAction(UIAlertAction(title: "파일 목록", style: .default) { [weak self] _ in
+            self?.documentPickerManager.presentDocumentPicker()
+        })
+        
+        // 사진첩에서 선택
+        alertController.addAction(UIAlertAction(title: "사진첩 비디오", style: .default) { [weak self] _ in
+            self?.documentPickerManager.presentPhotoLibraryVideoPicker()
+        })
+        
+        // 취소
+        alertController.addAction(UIAlertAction(title: "취소", style: .cancel))
+        
+        // iPad 지원을 위한 popoverPresentationController 설정
+        if let popover = alertController.popoverPresentationController {
+            popover.sourceView = addFileButton
+            popover.sourceRect = addFileButton.bounds
+        }
+        
+        present(alertController, animated: true)
     }
     
     // MARK: - Video Playback

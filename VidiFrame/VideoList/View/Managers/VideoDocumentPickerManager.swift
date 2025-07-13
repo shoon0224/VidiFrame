@@ -8,6 +8,7 @@
 import UIKit
 import MobileCoreServices
 import UniformTypeIdentifiers
+import PhotosUI
 
 /**
  * 비디오 파일 선택을 위한 문서 피커 관리 클래스
@@ -51,6 +52,22 @@ class VideoDocumentPickerManager: NSObject {
         documentPicker.allowsMultipleSelection = false
         presentingViewController.present(documentPicker, animated: true)
     }
+    
+    /**
+     * 사진첩에서 비디오 선택을 위한 PHPickerViewController 표시
+     * 사진첩에서 비디오만 선택할 수 있도록 구성
+     */
+    func presentPhotoLibraryVideoPicker() {
+        guard let presentingViewController = presentingViewController else { return }
+        
+        var configuration = PHPickerConfiguration()
+        configuration.filter = .videos // 비디오만 선택 가능
+        configuration.selectionLimit = 1 // 한 번에 하나의 비디오만 선택
+        
+        let picker = PHPickerViewController(configuration: configuration)
+        picker.delegate = self
+        presentingViewController.present(picker, animated: true)
+    }
 }
 
 // MARK: - UIDocumentPickerDelegate
@@ -74,5 +91,60 @@ extension VideoDocumentPickerManager: UIDocumentPickerDelegate {
     func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
         // 필요시 취소 처리 로직 구현
         print("문서 선택이 취소되었습니다.")
+    }
+}
+
+// MARK: - PHPickerViewControllerDelegate
+extension VideoDocumentPickerManager: PHPickerViewControllerDelegate {
+    
+    /**
+     * 사진첩에서 비디오 선택 완료 시 호출
+     * 선택된 비디오 파일을 앱 내부 저장소에 복사한 후 뷰모델에 추가 요청
+     * @param picker 사진 선택기 인스턴스
+     * @param results 선택된 항목들의 결과 배열
+     */
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+        
+        guard let result = results.first else { return }
+        
+        // 비디오 파일 처리
+        if result.itemProvider.hasItemConformingToTypeIdentifier(UTType.movie.identifier) {
+            result.itemProvider.loadFileRepresentation(forTypeIdentifier: UTType.movie.identifier) { [weak self] url, error in
+                if let error = error {
+                    print("비디오 로드 오류: \(error)")
+                    return
+                }
+                
+                guard let sourceURL = url else { return }
+                
+                // 파일을 앱 내부 Documents 디렉토리에 복사
+                self?.copyVideoToDocuments(from: sourceURL)
+            }
+        }
+    }
+    
+    /**
+     * 사진첩에서 선택한 비디오 파일을 앱 내부 Documents 디렉토리에 복사
+     * @param sourceURL 사진첩에서 선택한 비디오 파일의 임시 URL
+     */
+    private func copyVideoToDocuments(from sourceURL: URL) {
+        let fileManager = FileManager.default
+        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
+        
+        let fileName = "video_\(Date().timeIntervalSince1970).\(sourceURL.pathExtension)"
+        let destinationURL = documentsURL.appendingPathComponent(fileName)
+        
+        do {
+            // 파일 복사
+            try fileManager.copyItem(at: sourceURL, to: destinationURL)
+            
+            // 메인 스레드에서 뷰모델에 추가
+            DispatchQueue.main.async { [weak self] in
+                self?.viewModel?.addVideo(destinationURL)
+            }
+        } catch {
+            print("비디오 복사 오류: \(error)")
+        }
     }
 } 
