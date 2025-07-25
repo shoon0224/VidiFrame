@@ -44,6 +44,9 @@ class CustomVideoPlayerViewController: UIViewController {
     /// 프로그레스 업데이트 타이머
     private var progressTimer: Timer?
     
+    /// KVO 관찰자들
+    private var playerItemObservers: [NSKeyValueObservation] = []
+    
     // MARK: - UI Components
     
     /// 비디오 표시 뷰
@@ -163,6 +166,12 @@ class CustomVideoPlayerViewController: UIViewController {
         super.viewDidAppear(animated)
         startProgressTimer()
         showControlsTemporarily()
+        
+        // 화면이 나타날 때 duration 다시 확인 및 자동 재생 시도
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.setupDuration()
+            self.startAutoPlay()
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -233,7 +242,6 @@ class CustomVideoPlayerViewController: UIViewController {
         // 하단 컨트롤 뷰
         bottomControlsView.snp.makeConstraints {
             $0.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
-            $0.height.equalTo(100)
         }
         
         // 닫기 버튼
@@ -286,6 +294,7 @@ class CustomVideoPlayerViewController: UIViewController {
         buttonStackView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(progressSlider.snp.bottom).offset(16)
+            $0.bottom.equalToSuperview()
             $0.width.equalTo(180)
             $0.height.equalTo(40)
         }
@@ -315,12 +324,8 @@ class CustomVideoPlayerViewController: UIViewController {
             object: player.currentItem
         )
         
-        // 비디오 준비 완료 시 총 시간 설정
-        player.currentItem?.asset.loadValuesAsynchronously(forKeys: ["duration"]) { [weak self] in
-            DispatchQueue.main.async {
-                self?.setupDuration()
-            }
-        }
+        // KVO를 사용하여 플레이어 아이템 상태 관찰
+        setupPlayerItemObservers()
     }
     
     /**
@@ -347,16 +352,118 @@ class CustomVideoPlayerViewController: UIViewController {
     }
     
     /**
-     * 비디오 총 시간 설정
+     * KVO를 사용하여 플레이어 아이템의 상태와 duration 관찰 설정
      */
-    private func setupDuration() {
-        guard let duration = player.currentItem?.duration else { return }
+    private func setupPlayerItemObservers() {
+        guard let playerItem = player.currentItem else { return }
+        
+        // 플레이어 아이템 상태 관찰
+        let statusObserver = playerItem.observe(\.status, options: [.new, .initial]) { [weak self] item, _ in
+            DispatchQueue.main.async {
+                self?.handlePlayerItemStatusChange(item)
+            }
+        }
+        
+        // duration 관찰
+        let durationObserver = playerItem.observe(\.duration, options: [.new, .initial]) { [weak self] item, _ in
+            DispatchQueue.main.async {
+                self?.handleDurationChange(item)
+            }
+        }
+        
+        playerItemObservers.append(statusObserver)
+        playerItemObservers.append(durationObserver)
+    }
+    
+    /**
+     * 플레이어 아이템 상태 변화 처리
+     */
+    private func handlePlayerItemStatusChange(_ playerItem: AVPlayerItem) {
+        switch playerItem.status {
+        case .readyToPlay:
+            print("비디오 준비 완료")
+            setupDuration()
+            // 비디오가 준비되면 자동으로 재생 시작
+            startAutoPlay()
+        case .failed:
+            print("비디오 로드 실패: \(playerItem.error?.localizedDescription ?? "알 수 없는 오류")")
+        case .unknown:
+            print("비디오 상태 알 수 없음")
+        @unknown default:
+            break
+        }
+    }
+    
+    /**
+     * duration 변화 처리
+     */
+    private func handleDurationChange(_ playerItem: AVPlayerItem) {
+        let duration = playerItem.duration
         let totalSeconds = CMTimeGetSeconds(duration)
         
-        if !totalSeconds.isNaN && !totalSeconds.isInfinite {
+        // duration이 유효한 값인지 확인
+        if !totalSeconds.isNaN && !totalSeconds.isInfinite && totalSeconds > 0 {
             progressSlider.maximumValue = Float(totalSeconds)
             durationLabel.text = formatTime(totalSeconds)
+            print("비디오 총 시간 설정: \(formatTime(totalSeconds))")
         }
+    }
+    
+    /**
+     * 비디오 총 시간 설정 (기존 메서드 개선)
+     */
+    private func setupDuration() {
+        guard let playerItem = player.currentItem else { return }
+        
+        // 플레이어 아이템이 준비된 상태인지 확인
+        guard playerItem.status == .readyToPlay else { return }
+        
+        let duration = playerItem.duration
+        let totalSeconds = CMTimeGetSeconds(duration)
+        
+        if !totalSeconds.isNaN && !totalSeconds.isInfinite && totalSeconds > 0 {
+            progressSlider.maximumValue = Float(totalSeconds)
+            durationLabel.text = formatTime(totalSeconds)
+            print("setupDuration 호출 - 총 시간: \(formatTime(totalSeconds))")
+        } else {
+            // duration을 직접 가져올 수 없는 경우 asset에서 로드 시도
+            let asset = playerItem.asset
+            Task {
+                do {
+                    let duration = try await asset.load(.duration)
+                    let totalSeconds = CMTimeGetSeconds(duration)
+                    
+                    await MainActor.run {
+                        if !totalSeconds.isNaN && !totalSeconds.isInfinite && totalSeconds > 0 {
+                            self.progressSlider.maximumValue = Float(totalSeconds)
+                            self.durationLabel.text = self.formatTime(totalSeconds)
+                            print("Asset에서 duration 로드 완료: \(self.formatTime(totalSeconds))")
+                        }
+                    }
+                } catch {
+                    print("Asset duration 로드 실패: \(error)")
+                }
+            }
+        }
+    }
+    
+    /**
+     * 자동 재생 시작
+     */
+    private func startAutoPlay() {
+        guard let playerItem = player.currentItem,
+              playerItem.status == .readyToPlay else { return }
+        
+        // 이미 재생 중이면 리턴
+        guard player.timeControlStatus != .playing else { return }
+        
+        // 플레이어 재생 시작 (현재 재생 속도 적용)
+        player.rate = currentPlaybackRate
+        
+        // 재생/일시정지 버튼 아이콘 업데이트
+        playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+        
+        print("자동 재생 시작 (속도: \(currentPlaybackRate)x)")
     }
     
     // MARK: - Control Methods
@@ -413,12 +520,26 @@ class CustomVideoPlayerViewController: UIViewController {
      * 프로그레스 업데이트
      */
     private func updateProgress() {
-        guard let currentTime = player.currentItem?.currentTime() else { return }
+        guard let playerItem = player.currentItem else { return }
+        
+        let currentTime = playerItem.currentTime()
         let currentSeconds = CMTimeGetSeconds(currentTime)
         
         if !currentSeconds.isNaN && !currentSeconds.isInfinite {
             progressSlider.value = Float(currentSeconds)
             currentTimeLabel.text = formatTime(currentSeconds)
+        }
+        
+        // duration이 아직 설정되지 않았다면 다시 시도
+        if progressSlider.maximumValue <= 0 {
+            let duration = playerItem.duration
+            let totalSeconds = CMTimeGetSeconds(duration)
+            
+            if !totalSeconds.isNaN && !totalSeconds.isInfinite && totalSeconds > 0 {
+                progressSlider.maximumValue = Float(totalSeconds)
+                durationLabel.text = formatTime(totalSeconds)
+                print("프로그레스 업데이트 중 duration 재설정: \(formatTime(totalSeconds))")
+            }
         }
     }
     
@@ -529,5 +650,9 @@ class CustomVideoPlayerViewController: UIViewController {
         NotificationCenter.default.removeObserver(self)
         controlsTimer?.invalidate()
         stopProgressTimer()
+        
+        // KVO 관찰자 해제
+        playerItemObservers.forEach { $0.invalidate() }
+        playerItemObservers.removeAll()
     }
 } 
