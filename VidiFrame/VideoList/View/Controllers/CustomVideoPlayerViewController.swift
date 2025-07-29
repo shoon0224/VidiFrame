@@ -416,8 +416,13 @@ class CustomVideoPlayerViewController: UIViewController {
      * 제스처 설정
      */
     private func setupGestures() {
+        // 비디오 영역에서만 터치 감지 (컨트롤러 토글용)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(screenTapped))
         videoContainerView.addGestureRecognizer(tapGesture)
+        
+        // 컨트롤러 영역에서는 터치 이벤트가 비디오 영역으로 전달되지 않도록 설정
+        let controlsTapGesture = UITapGestureRecognizer(target: self, action: #selector(controlsAreaTapped))
+        controlsOverlayView.addGestureRecognizer(controlsTapGesture)
     }
     
     /**
@@ -956,6 +961,26 @@ class CustomVideoPlayerViewController: UIViewController {
     }
     
     @objc private func screenTapped() {
+        // 비디오 영역 터치 시 컨트롤러 토글
+        toggleControls()
+    }
+    
+    @objc private func controlsAreaTapped(_ gesture: UITapGestureRecognizer) {
+        let location = gesture.location(in: controlsOverlayView)
+        
+        // 상단 컨트롤 영역 확인
+        let topControlsFrame = topControlsView.frame
+        if topControlsFrame.contains(location) {
+            return // 상단 컨트롤 영역이면 토글하지 않음
+        }
+        
+        // 하단 컨트롤 영역 확인
+        let bottomControlsFrame = bottomControlsView.frame
+        if bottomControlsFrame.contains(location) {
+            return // 하단 컨트롤 영역이면 토글하지 않음
+        }
+        
+        // 컨트롤러 영역의 빈 공간을 터치했으면 토글
         toggleControls()
     }
     
