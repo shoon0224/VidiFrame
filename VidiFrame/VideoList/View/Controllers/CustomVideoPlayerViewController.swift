@@ -62,6 +62,9 @@ class CustomVideoPlayerViewController: UIViewController {
     /// 이전 화면 크기 (회전 감지용)
     private var previousBounds: CGRect = .zero
     
+    /// 사용자가 컨트롤러를 조작 중인지 추적
+    private var isUserInteracting = false
+    
     // MARK: - UI Components
     
     /// 비디오 표시 뷰
@@ -400,6 +403,7 @@ class CustomVideoPlayerViewController: UIViewController {
      * 버튼 액션 설정
      */
     private func setupActions() {
+        // 버튼 클릭 액션
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         playPauseButton.addTarget(self, action: #selector(playPauseButtonTapped), for: .touchUpInside)
         loopButton.addTarget(self, action: #selector(loopButtonTapped), for: .touchUpInside)
@@ -407,6 +411,14 @@ class CustomVideoPlayerViewController: UIViewController {
         zoomButton.addTarget(self, action: #selector(zoomButtonTapped), for: .touchUpInside)
         burnInPreventionButton.addTarget(self, action: #selector(burnInPreventionButtonTapped), for: .touchUpInside)
         
+        // 모든 버튼에 터치 시작/끝 이벤트 추가 (자동 숨김 방지용)
+        let buttons = [closeButton, playPauseButton, loopButton, speedButton, zoomButton, burnInPreventionButton]
+        for button in buttons {
+            button.addTarget(self, action: #selector(buttonTouchBegan), for: .touchDown)
+            button.addTarget(self, action: #selector(buttonTouchEnded), for: [.touchUpInside, .touchUpOutside, .touchCancel])
+        }
+        
+        // 프로그레스 슬라이더
         progressSlider.addTarget(self, action: #selector(progressSliderChanged), for: .valueChanged)
         progressSlider.addTarget(self, action: #selector(progressSliderTouchBegan), for: .touchDown)
         progressSlider.addTarget(self, action: #selector(progressSliderTouchEnded), for: [.touchUpInside, .touchUpOutside])
@@ -720,18 +732,46 @@ class CustomVideoPlayerViewController: UIViewController {
         setNeedsUpdateOfHomeIndicatorAutoHidden()
         setNeedsStatusBarAppearanceUpdate()
         
-        //컨트롤러 사라지고 3초뒤에 홈바가 사라짐
+        // 사용자가 조작 중이 아닐 때만 자동 숨김 타이머 시작
+        startAutoHideTimer()
+    }
+    
+    /**
+     * 자동 숨김 타이머 시작 (사용자 조작 중이 아닐 때만)
+     */
+    private func startAutoHideTimer() {
+        guard !isUserInteracting else { return }
+        
+        controlsTimer?.invalidate()
         controlsTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { [weak self] _ in
-            if self?.player.timeControlStatus == .playing {
+            guard let self = self, !self.isUserInteracting else { return }
+            
+            if self.player.timeControlStatus == .playing {
                 UIView.animate(withDuration: 0.3) {
-                    self?.controlsOverlayView.alpha = 0
+                    self.controlsOverlayView.alpha = 0
                 } completion: { _ in
                     // 컨트롤이 숨겨질 때 홈바와 상태바 업데이트
-                    self?.setNeedsUpdateOfHomeIndicatorAutoHidden()
-                    self?.setNeedsStatusBarAppearanceUpdate()
+                    self.setNeedsUpdateOfHomeIndicatorAutoHidden()
+                    self.setNeedsStatusBarAppearanceUpdate()
                 }
             }
         }
+    }
+    
+    /**
+     * 사용자 상호작용 시작
+     */
+    private func startUserInteraction() {
+        isUserInteracting = true
+        controlsTimer?.invalidate()
+    }
+    
+    /**
+     * 사용자 상호작용 종료
+     */
+    private func endUserInteraction() {
+        isUserInteracting = false
+        startAutoHideTimer()
     }
     
     /**
@@ -953,11 +993,21 @@ class CustomVideoPlayerViewController: UIViewController {
     
     @objc private func progressSliderTouchBegan() {
         stopProgressTimer()
+        startUserInteraction() // 사용자 상호작용 시작
     }
     
     @objc private func progressSliderTouchEnded() {
         startProgressTimer()
+        endUserInteraction() // 사용자 상호작용 종료
         showControlsTemporarily()
+    }
+    
+    @objc private func buttonTouchBegan() {
+        startUserInteraction() // 버튼 터치 시작 - 자동 숨김 방지
+    }
+    
+    @objc private func buttonTouchEnded() {
+        endUserInteraction() // 버튼 터치 종료 - 자동 숨김 재시작
     }
     
     @objc private func screenTapped() {
@@ -983,6 +1033,8 @@ class CustomVideoPlayerViewController: UIViewController {
         // 컨트롤러 영역의 빈 공간을 터치했으면 토글
         toggleControls()
     }
+    
+
     
     @objc private func playerItemDidReachEnd() {
         if isLoopEnabled {
@@ -1025,3 +1077,4 @@ class CustomVideoPlayerViewController: UIViewController {
         playerItemObservers.removeAll()
     }
 } 
+
