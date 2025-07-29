@@ -47,6 +47,21 @@ class CustomVideoPlayerViewController: UIViewController {
     /// KVO 관찰자들
     private var playerItemObservers: [NSKeyValueObservation] = []
     
+    /// 번인 방지용 화면 이동 타이머
+    private var burnInPreventionTimer: Timer?
+    
+    /// 원본 비디오 프레임 (확대된 크기)
+    private var originalVideoFrame: CGRect = .zero
+    
+    /// 현재 비디오 프레임 위치 (이동 추적용)
+    private var currentVideoFrame: CGRect = .zero
+    
+    /// 번인 방지 활성화 여부
+    private var isBurnInPreventionEnabled = false
+    
+    /// 이전 화면 크기 (회전 감지용)
+    private var previousBounds: CGRect = .zero
+    
     // MARK: - UI Components
     
     /// 비디오 표시 뷰
@@ -134,6 +149,14 @@ class CustomVideoPlayerViewController: UIViewController {
         $0.layer.cornerRadius = 20
     }
     
+    /// 번인 방지 버튼
+    private let burnInPreventionButton = UIButton(type: .system).then {
+        $0.setImage(UIImage(systemName: "move.3d"), for: .normal)
+        $0.tintColor = .white
+        $0.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        $0.layer.cornerRadius = 20
+    }
+    
     // MARK: - Initialization
     
     /**
@@ -160,12 +183,19 @@ class CustomVideoPlayerViewController: UIViewController {
         setupPlayer()
         setupActions()
         setupGestures()
+        
+        // 초기 버튼 상태 설정
+        updateZoomButtonAppearance()
+        updateBurnInButtonState()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         startProgressTimer()
         showControlsTemporarily()
+        
+        // 초기 화면 크기 저장
+        previousBounds = videoContainerView.bounds
         
         // 화면이 나타날 때 duration 다시 확인 및 자동 재생 시도
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -178,11 +208,48 @@ class CustomVideoPlayerViewController: UIViewController {
         super.viewWillDisappear(animated)
         stopProgressTimer()
         controlsTimer?.invalidate()
+        stopBurnInPrevention()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        playerLayer?.frame = videoContainerView.bounds
+        
+        let currentBounds = videoContainerView.bounds
+        let isRotationDetected = !previousBounds.equalTo(currentBounds) && !previousBounds.equalTo(.zero)
+        
+        if !isZoomed {
+            // 일반 모드: 정상 레이아웃 설정
+            setupVideoLayerFrame()
+        } else if isRotationDetected {
+            // 확대 모드 + 화면 회전 감지: 레이아웃 재설정
+            resetZoomModeForRotation()
+        }
+        
+        // 현재 화면 크기 저장
+        previousBounds = currentBounds
+    }
+    
+    /**
+     * 화면 회전 시 확대 모드 레이아웃 재설정
+     */
+    private func resetZoomModeForRotation() {
+        guard let playerLayer = playerLayer else { return }
+        
+        // 1. 화면 초기화 (원래 위치로)
+        let containerBounds = videoContainerView.bounds
+        playerLayer.frame = containerBounds
+        
+        // 2. 확대 모드 레이아웃 재설정
+        setupVideoLayerFrame()
+        
+        // 3. 현재 위치 업데이트
+        currentVideoFrame = originalVideoFrame
+        
+        // 4. 번인 방지가 활성화되어 있다면 타이머 재시작 (새로운 방향에 맞게)
+        if isBurnInPreventionEnabled {
+            stopBurnInPrevention()
+            startBurnInPrevention()
+        }
     }
     
     // MARK: - Setup Methods
@@ -214,6 +281,7 @@ class CustomVideoPlayerViewController: UIViewController {
         bottomControlsView.addSubview(loopButton)
         bottomControlsView.addSubview(speedButton)
         bottomControlsView.addSubview(zoomButton)
+        bottomControlsView.addSubview(burnInPreventionButton)
         
         // 레이아웃 설정
         setupConstraints()
@@ -284,10 +352,10 @@ class CustomVideoPlayerViewController: UIViewController {
             $0.centerY.equalTo(currentTimeLabel)
         }
         
-        // 하단 버튼들 (반복, 속도, 확대)
-        let buttonStackView = UIStackView(arrangedSubviews: [loopButton, speedButton, zoomButton])
+        // 하단 버튼들 (반복, 속도, 확대, 번인방지)
+        let buttonStackView = UIStackView(arrangedSubviews: [loopButton, speedButton, zoomButton, burnInPreventionButton])
         buttonStackView.axis = .horizontal
-        buttonStackView.spacing = 16
+        buttonStackView.spacing = 12
         buttonStackView.distribution = .fillEqually
         
         bottomControlsView.addSubview(buttonStackView)
@@ -295,12 +363,12 @@ class CustomVideoPlayerViewController: UIViewController {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(progressSlider.snp.bottom).offset(16)
             $0.bottom.equalToSuperview()
-            $0.width.equalTo(180)
+            $0.width.equalTo(240)  // 4개 버튼이므로 너비 증가
             $0.height.equalTo(40)
         }
         
         // 각 버튼들
-        [loopButton, speedButton, zoomButton].forEach { button in
+        [loopButton, speedButton, zoomButton, burnInPreventionButton].forEach { button in
             button.snp.makeConstraints {
                 $0.height.equalTo(40)
             }
@@ -337,6 +405,7 @@ class CustomVideoPlayerViewController: UIViewController {
         loopButton.addTarget(self, action: #selector(loopButtonTapped), for: .touchUpInside)
         speedButton.addTarget(self, action: #selector(speedButtonTapped), for: .touchUpInside)
         zoomButton.addTarget(self, action: #selector(zoomButtonTapped), for: .touchUpInside)
+        burnInPreventionButton.addTarget(self, action: #selector(burnInPreventionButtonTapped), for: .touchUpInside)
         
         progressSlider.addTarget(self, action: #selector(progressSliderChanged), for: .valueChanged)
         progressSlider.addTarget(self, action: #selector(progressSliderTouchBegan), for: .touchDown)
@@ -466,6 +535,154 @@ class CustomVideoPlayerViewController: UIViewController {
         print("자동 재생 시작 (속도: \(currentPlaybackRate)x)")
     }
     
+    // MARK: - Video Layer Setup
+    
+    /**
+     * 비디오 레이어 프레임 설정 (줌 상태에 따라)
+     */
+    private func setupVideoLayerFrame() {
+        guard let playerLayer = playerLayer else { return }
+        
+        let containerBounds = videoContainerView.bounds
+        
+        if isZoomed {
+            // 확대 모드: 번인 방지를 위한 여백 확보
+            originalVideoFrame = calculateAspectFillFrameWithMargin(for: containerBounds)
+            playerLayer.videoGravity = .resizeAspectFill
+        } else {
+            // 일반 모드: 원본 크기
+            originalVideoFrame = containerBounds
+            playerLayer.videoGravity = .resizeAspect
+        }
+        
+        // 현재 위치 초기화
+        currentVideoFrame = originalVideoFrame
+        
+        // 부드러운 전환 애니메이션 적용
+        UIView.animate(withDuration: 0.3) {
+            playerLayer.frame = self.originalVideoFrame
+        }
+        
+        // 번인 버튼 활성화 상태 업데이트
+        updateBurnInButtonState()
+    }
+    
+    /**
+     * AspectFill 모드에서 이동 여백을 확보한 프레임 계산
+     */
+    private func calculateAspectFillFrameWithMargin(for containerBounds: CGRect) -> CGRect {
+        // 디바이스 방향에 따라 여백 확보 방향 결정
+        let isLandscape = containerBounds.width > containerBounds.height
+        
+        if isLandscape {
+            // 가로 모드: 상하로 이동할 여백 확보 (위아래 손실 부분 + 여백)
+            let marginRatio: CGFloat = 0.15 // 15% 여백 추가
+            let expandedHeight = containerBounds.height * (1.0 + marginRatio)
+            let offsetY = (containerBounds.height - expandedHeight) / 2
+            
+            return CGRect(
+                x: containerBounds.origin.x,
+                y: containerBounds.origin.y + offsetY,
+                width: containerBounds.width,
+                height: expandedHeight
+            )
+        } else {
+            // 세로 모드: 좌우로 이동할 여백 확보 (좌우 손실 부분 + 여백)
+            let marginRatio: CGFloat = 0.15 // 15% 여백 추가
+            let expandedWidth = containerBounds.width * (1.0 + marginRatio)
+            let offsetX = (containerBounds.width - expandedWidth) / 2
+            
+            return CGRect(
+                x: containerBounds.origin.x + offsetX,
+                y: containerBounds.origin.y,
+                width: expandedWidth,
+                height: containerBounds.height
+            )
+        }
+    }
+    
+    // MARK: - Burn-in Prevention
+    
+    /**
+     * 번인 방지 화면 이동 시작 (3초마다)
+     */
+    private func startBurnInPrevention() {
+        stopBurnInPrevention() // 기존 타이머 정리
+        
+        //3분 마다 화면 이동
+        burnInPreventionTimer = Timer.scheduledTimer(withTimeInterval: 180.0, repeats: true) { [weak self] _ in
+            self?.shiftVideoPosition()
+        }
+    }
+    
+    /**
+     * 번인 방지 화면 이동 정지
+     */
+    private func stopBurnInPrevention() {
+        burnInPreventionTimer?.invalidate()
+        burnInPreventionTimer = nil
+    }
+    
+    /**
+     * 비디오 위치를 디바이스 방향에 따라 이동 (꽉찬 화면의 손실 부분만큼)
+     */
+    private func shiftVideoPosition() {
+        guard let playerLayer = playerLayer else { return }
+        guard isZoomed && isBurnInPreventionEnabled else { return } // 줌 + 번인 방지 모두 활성화되어야 이동
+        
+        let containerBounds = videoContainerView.bounds
+        let isLandscape = containerBounds.width > containerBounds.height
+        
+        // 이동 가능한 범위 계산
+        let maxShiftX = abs(originalVideoFrame.width - containerBounds.width) * 0.4
+        let maxShiftY = abs(originalVideoFrame.height - containerBounds.height) * 0.4
+        
+        var newCenterX = currentVideoFrame.midX
+        var newCenterY = currentVideoFrame.midY
+        
+        if isLandscape {
+            // 가로 모드: 상하로만 이동
+            // 화면 중앙을 기준으로 허용 범위 내에서 완전히 새로운 Y 위치 생성
+            let minY = containerBounds.midY - maxShiftY
+            let maxY = containerBounds.midY + maxShiftY
+            
+            // 현재 위치와 다른 새로운 위치 생성 (최소 20pt 차이)
+            var attempts = 0
+            repeat {
+                newCenterY = CGFloat.random(in: minY...maxY)
+                attempts += 1
+            } while abs(newCenterY - currentVideoFrame.midY) < 20 && attempts < 10
+        } else {
+            // 세로 모드: 좌우로만 이동
+            // 화면 중앙을 기준으로 허용 범위 내에서 완전히 새로운 X 위치 생성
+            let minX = containerBounds.midX - maxShiftX
+            let maxX = containerBounds.midX + maxShiftX
+            
+            // 현재 위치와 다른 새로운 위치 생성 (최소 20pt 차이)
+            var attempts = 0
+            repeat {
+                newCenterX = CGFloat.random(in: minX...maxX)
+                attempts += 1
+            } while abs(newCenterX - currentVideoFrame.midX) < 20 && attempts < 10
+        }
+        
+        // 새로운 프레임 계산
+        let newFrame = CGRect(
+            x: newCenterX - originalVideoFrame.width / 2,
+            y: newCenterY - originalVideoFrame.height / 2,
+            width: originalVideoFrame.width,
+            height: originalVideoFrame.height
+        )
+        
+        // 부드러운 애니메이션으로 이동
+        UIView.animate(withDuration: 2.0, delay: 0, options: [.curveEaseInOut]) { [weak self] in
+            playerLayer.frame = newFrame
+        } completion: { [weak self] _ in
+            // 이동 완료 후 현재 위치 업데이트
+            self?.currentVideoFrame = newFrame
+        }
+    }
+    
     // MARK: - Control Methods
     
     /**
@@ -566,6 +783,22 @@ class CustomVideoPlayerViewController: UIViewController {
         return String(format: "%02d:%02d", minutes, remainingSeconds)
     }
     
+    /**
+     * 영상이 끝까지 재생되었는지 확인
+     */
+    private func isVideoAtEnd() -> Bool {
+        guard let playerItem = player.currentItem else { return false }
+        
+        let currentTime = CMTimeGetSeconds(playerItem.currentTime())
+        let duration = CMTimeGetSeconds(playerItem.duration)
+        
+        // duration이 유효하지 않으면 false 반환
+        guard !duration.isNaN && !duration.isInfinite && duration > 0 else { return false }
+        
+        // 현재 시간이 전체 시간의 99% 이상이면 끝으로 간주 (1초 오차 허용)
+        return currentTime >= (duration - 1.0)
+    }
+    
     // MARK: - Actions
     
     @objc private func closeButtonTapped() {
@@ -577,9 +810,20 @@ class CustomVideoPlayerViewController: UIViewController {
             player.pause()
             playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
         } else {
-            player.play()
-            playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
-            showControlsTemporarily()
+            // 영상이 끝까지 재생되었는지 확인
+            if isVideoAtEnd() {
+                // 처음부터 다시 재생
+                player.seek(to: .zero) { [weak self] _ in
+                    self?.player.play()
+                    self?.playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+                    self?.showControlsTemporarily()
+                }
+            } else {
+                // 일반 재생
+                player.play()
+                playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+                showControlsTemporarily()
+            }
         }
         
         let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
@@ -615,15 +859,83 @@ class CustomVideoPlayerViewController: UIViewController {
     @objc private func zoomButtonTapped() {
         isZoomed.toggle()
         
-        UIView.animate(withDuration: 0.3) {
-            self.playerLayer.videoGravity = self.isZoomed ? .resizeAspectFill : .resizeAspect
+        // 줌 해제 시 번인 방지도 자동 해제
+        if !isZoomed && isBurnInPreventionEnabled {
+            isBurnInPreventionEnabled = false
+            stopBurnInPrevention()
         }
         
+        // 비디오 레이어 재설정
+        setupVideoLayerFrame()
+        
+        updateZoomButtonAppearance()
+        
+        let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+        impactFeedback.impactOccurred()
+    }
+    
+    /**
+     * 줌 버튼 외관 업데이트
+     */
+    private func updateZoomButtonAppearance() {
         zoomButton.setImage(
             UIImage(systemName: isZoomed ? "arrow.down.right.and.arrow.up.left" : "arrow.up.left.and.arrow.down.right"),
             for: .normal
         )
+        
         zoomButton.tintColor = isZoomed ? .systemBlue : .white
+        zoomButton.backgroundColor = isZoomed ? 
+            UIColor.systemBlue.withAlphaComponent(0.3) : 
+            UIColor.black.withAlphaComponent(0.6)
+    }
+    
+    /**
+     * 번인 방지 버튼 활성화 상태 업데이트
+     */
+    private func updateBurnInButtonState() {
+        let isEnabled = isZoomed
+        
+        if isEnabled {
+            // 줌 활성화 시: 번인 방지 버튼 활성화
+            burnInPreventionButton.tintColor = isBurnInPreventionEnabled ? .systemBlue : .white
+            burnInPreventionButton.backgroundColor = isBurnInPreventionEnabled ?
+                UIColor.systemBlue.withAlphaComponent(0.3) :
+                UIColor.black.withAlphaComponent(0.6)
+            burnInPreventionButton.isEnabled = true
+            burnInPreventionButton.alpha = 1.0
+        } else {
+            // 줌 비활성화 시: 번인 방지 버튼 비활성화
+            burnInPreventionButton.tintColor = .gray
+            burnInPreventionButton.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+            burnInPreventionButton.isEnabled = false
+            burnInPreventionButton.alpha = 0.5
+        }
+    }
+    
+    @objc private func burnInPreventionButtonTapped() {
+        // 줌이 비활성화된 상태에서는 번인 방지 사용 불가
+        guard isZoomed else {
+            print("화면을 먼저 확대해주세요")
+            
+            // 알림 햅틱 피드백
+            let notificationFeedback = UINotificationFeedbackGenerator()
+            notificationFeedback.notificationOccurred(.warning)
+            return
+        }
+        
+        isBurnInPreventionEnabled.toggle()
+        
+        // 현재 화면 크기 업데이트 (회전 감지 오작동 방지)
+        previousBounds = videoContainerView.bounds
+        
+        if isBurnInPreventionEnabled {
+            startBurnInPrevention()
+        } else {
+            stopBurnInPrevention()
+        }
+        
+        // 번인 버튼 상태 업데이트
+        updateBurnInButtonState()
         
         let impactFeedback = UIImpactFeedbackGenerator(style: .light)
         impactFeedback.impactOccurred()
@@ -649,11 +961,15 @@ class CustomVideoPlayerViewController: UIViewController {
     
     @objc private func playerItemDidReachEnd() {
         if isLoopEnabled {
-            player.seek(to: .zero)
-            player.play()
+            // 반복 재생이 켜져있으면 자동으로 처음부터 재생
+            player.seek(to: .zero) { [weak self] _ in
+                self?.player.play()
+            }
         } else {
+            // 반복 재생이 꺼져있으면 정지 상태로 두고 재생 버튼 표시
             playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
             showControlsTemporarily()
+            print("영상 재생 완료 - 재생 버튼을 누르면 처음부터 다시 재생됩니다")
         }
     }
     
@@ -677,6 +993,7 @@ class CustomVideoPlayerViewController: UIViewController {
         NotificationCenter.default.removeObserver(self)
         controlsTimer?.invalidate()
         stopProgressTimer()
+        stopBurnInPrevention()
         
         // KVO 관찰자 해제
         playerItemObservers.forEach { $0.invalidate() }
