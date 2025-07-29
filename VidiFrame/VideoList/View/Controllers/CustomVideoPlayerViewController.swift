@@ -476,6 +476,10 @@ class CustomVideoPlayerViewController: UIViewController {
         
         UIView.animate(withDuration: 0.3) {
             self.controlsOverlayView.alpha = isHidden ? 1 : 0
+        } completion: { _ in
+            // 홈바와 상태바 업데이트
+            self.setNeedsUpdateOfHomeIndicatorAutoHidden()
+            self.setNeedsStatusBarAppearanceUpdate()
         }
         
         if isHidden {
@@ -490,10 +494,19 @@ class CustomVideoPlayerViewController: UIViewController {
         controlsTimer?.invalidate()
         controlsOverlayView.alpha = 1
         
+        // 컨트롤이 나타날 때도 홈바/상태바 업데이트
+        setNeedsUpdateOfHomeIndicatorAutoHidden()
+        setNeedsStatusBarAppearanceUpdate()
+        
+        //컨트롤러 사라지고 3초뒤에 홈바가 사라짐
         controlsTimer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: false) { [weak self] _ in
             if self?.player.timeControlStatus == .playing {
                 UIView.animate(withDuration: 0.3) {
                     self?.controlsOverlayView.alpha = 0
+                } completion: { _ in
+                    // 컨트롤이 숨겨질 때 홈바와 상태바 업데이트
+                    self?.setNeedsUpdateOfHomeIndicatorAutoHidden()
+                    self?.setNeedsStatusBarAppearanceUpdate()
                 }
             }
         }
@@ -642,6 +655,20 @@ class CustomVideoPlayerViewController: UIViewController {
             playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
             showControlsTemporarily()
         }
+    }
+    
+    // MARK: - Status Bar & Home Indicator
+    
+    override var prefersHomeIndicatorAutoHidden: Bool {
+        return controlsOverlayView.alpha == 0
+    }
+    
+    override var prefersStatusBarHidden: Bool {
+        return controlsOverlayView.alpha == 0
+    }
+    
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        return .fade
     }
     
     // MARK: - Deinitialization
