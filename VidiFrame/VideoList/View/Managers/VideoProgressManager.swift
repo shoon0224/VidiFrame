@@ -19,70 +19,74 @@ class VideoProgressManager {
     /// 파일 저장 진행률을 표시하는 프로그레스 바
     private let progressView = UIProgressView(progressViewStyle: .default).then {
         $0.isHidden = true
-        $0.progressTintColor = .systemBlue
-        $0.trackTintColor = .lightGray
+        $0.progressTintColor = .label
+        $0.trackTintColor = .systemGray4
+        $0.layer.cornerRadius = 4.s
+        $0.clipsToBounds = true
     }
     
     /// 파일 저장 진행률 텍스트 레이블 (몇 MB / 전체 MB, 퍼센트)
     private let progressLabel = UILabel().then {
         $0.isHidden = true
-        $0.font = .systemFont(ofSize: 14, weight: .medium)
-        $0.textColor = .systemBlue
+        $0.font = .systemFont(ofSize: 13, weight: .semibold)
+        $0.textColor = .label
         $0.textAlignment = .center
+        $0.numberOfLines = 1
     }
     
-    /// 프로그레스 바와 레이블을 감싸는 컨테이너 뷰
-    private let progressContainerView = UIView().then {
-        $0.isHidden = true
-        $0.backgroundColor = .white
-        $0.layer.cornerRadius = 12
-        $0.layer.applyShadow()
-    }
+    /// 프로그레스 바와 레이블을 감싸는 Liquid Glass 컨테이너
+    private let progressContainerView = LiquidGlassContainerView(
+        cornerRadius: 20,
+        style: .regular,
+        presence: .prominent
+    )
     
     /// 완료 메시지를 표시할 뷰컨트롤러 (약한 참조)
     private weak var presentingViewController: UIViewController?
+    
+    private let horizontalInset: CGFloat = 23
     
     // MARK: - Initialization
     
     /**
      * 초기화자
      * @param parentView 프로그레스 뷰를 추가할 부모 뷰
-     * @param loadingIndicator 로딩 인디케이터 (프로그레스 뷰 위치 계산용)
      * @param presentingViewController 완료 메시지를 표시할 뷰컨트롤러
      */
-    init(parentView: UIView, loadingIndicator: UIActivityIndicatorView, presentingViewController: UIViewController) {
+    init(parentView: UIView, presentingViewController: UIViewController) {
         self.presentingViewController = presentingViewController
-        setupProgressViews(in: parentView, below: loadingIndicator)
+        setupProgressViews(in: parentView)
     }
     
     // MARK: - Setup Methods
     
     /**
-     * 프로그레스 관련 뷰들을 부모 뷰에 설정
+     * 프로그레스 관련 뷰들을 부모 뷰 중앙에 설정
      * @param parentView 부모 뷰
-     * @param loadingIndicator 로딩 인디케이터 (위치 기준점)
      */
-    private func setupProgressViews(in parentView: UIView, below loadingIndicator: UIActivityIndicatorView) {
-        // 진행률 컨테이너 뷰 설정
+    private func setupProgressViews(in parentView: UIView) {
+        progressContainerView.isHidden = true
+        
         parentView.addSubview(progressContainerView)
         progressContainerView.snp.makeConstraints {
-            $0.top.equalTo(loadingIndicator.snp.bottom).offset(20.s)
-            $0.leading.trailing.equalToSuperview().inset(23.s)
-            $0.height.equalTo(60.s)
+            $0.center.equalTo(parentView.safeAreaLayoutGuide)
+            $0.height.equalTo(72.s)
+            // 가로 모드에서도 세로 모드와 비슷한 너비 유지 (짧은 변 기준)
+            $0.width.lessThanOrEqualTo(parentView.snp.height).offset(-horizontalInset.s * 2)
+            $0.width.equalTo(parentView.safeAreaLayoutGuide).offset(-horizontalInset.s * 2).priority(.high)
         }
         
-        // 진행률 바 설정
-        progressContainerView.addSubview(progressView)
-        progressView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(16.s)
-            $0.centerY.equalToSuperview()
-        }
-        
-        // 진행률 텍스트 레이블 설정
-        progressContainerView.addSubview(progressLabel)
+        progressContainerView.contentView.addSubview(progressLabel)
         progressLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(14.s)
             $0.leading.trailing.equalToSuperview().inset(16.s)
-            $0.centerY.equalToSuperview()
+        }
+        
+        progressContainerView.contentView.addSubview(progressView)
+        progressView.snp.makeConstraints {
+            $0.top.equalTo(progressLabel.snp.bottom).offset(12.s)
+            $0.leading.trailing.equalToSuperview().inset(16.s)
+            $0.height.equalTo(8.s)
         }
     }
     
@@ -104,7 +108,7 @@ class VideoProgressManager {
         let totalMB = Double(progress.totalBytes) / (1024 * 1024)
         let copiedMB = Double(progress.copiedBytes) / (1024 * 1024)
         
-        progressLabel.text = String(format: "저장 중... %.1f/%.1f MB (%d%%)", copiedMB, totalMB, progressPercentage)
+        progressLabel.text = String(format: "저장 중 · %.1f/%.1f MB (%d%%)", copiedMB, totalMB, progressPercentage)
         
         if progress.isCompleted {
             // 저장 완료 시 0.5초 후 진행률 뷰 숨김

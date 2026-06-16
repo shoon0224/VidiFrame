@@ -69,10 +69,12 @@ class VideoOptionsManager {
         // 취소 액션
         actionSheet.addAction(UIAlertAction(title: "취소", style: .cancel))
         
-        // iPad에서 액션 시트가 제대로 표시되도록 popover 설정
-        if let popover = actionSheet.popoverPresentationController {
-            popover.sourceView = presentingViewController.view
-            popover.sourceRect = CGRect(x: presentingViewController.view.bounds.midX, y: presentingViewController.view.bounds.midY, width: 0, height: 0)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            actionSheet.modalPresentationStyle = .pageSheet
+            if let sheet = actionSheet.sheetPresentationController {
+                sheet.detents = [.medium()]
+                sheet.prefersGrabberVisible = true
+            }
         }
         
         presentingViewController.present(actionSheet, animated: true)

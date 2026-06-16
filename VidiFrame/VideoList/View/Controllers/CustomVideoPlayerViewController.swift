@@ -108,7 +108,7 @@ class CustomVideoPlayerViewController: UIViewController {
     
     /// 프로그레스 슬라이더
     private let progressSlider = UISlider().then {
-        $0.minimumTrackTintColor = .systemBlue
+        $0.minimumTrackTintColor = .white
         $0.maximumTrackTintColor = UIColor.white.withAlphaComponent(0.3)
         $0.thumbTintColor = .white
     }
@@ -692,7 +692,7 @@ class CustomVideoPlayerViewController: UIViewController {
         )
         
         // 부드러운 애니메이션으로 이동
-        UIView.animate(withDuration: 2.0, delay: 0, options: [.curveEaseInOut]) { [weak self] in
+        UIView.animate(withDuration: 2.0, delay: 0, options: [.curveEaseInOut]) {
             playerLayer.frame = newFrame
         } completion: { [weak self] _ in
             // 이동 완료 후 현재 위치 업데이트
@@ -878,9 +878,9 @@ class CustomVideoPlayerViewController: UIViewController {
     @objc private func loopButtonTapped() {
         isLoopEnabled.toggle()
         
-        loopButton.tintColor = isLoopEnabled ? .systemBlue : .white
-        loopButton.backgroundColor = isLoopEnabled ? 
-            UIColor.systemBlue.withAlphaComponent(0.3) : 
+        loopButton.tintColor = isLoopEnabled ? .white : .white.withAlphaComponent(0.7)
+        loopButton.backgroundColor = isLoopEnabled ?
+            UIColor.white.withAlphaComponent(0.22) :
             UIColor.black.withAlphaComponent(0.6)
         
         let impactFeedback = UIImpactFeedbackGenerator(style: .light)
@@ -928,9 +928,9 @@ class CustomVideoPlayerViewController: UIViewController {
             for: .normal
         )
         
-        zoomButton.tintColor = isZoomed ? .systemBlue : .white
-        zoomButton.backgroundColor = isZoomed ? 
-            UIColor.systemBlue.withAlphaComponent(0.3) : 
+        zoomButton.tintColor = isZoomed ? .white : .white.withAlphaComponent(0.7)
+        zoomButton.backgroundColor = isZoomed ?
+            UIColor.white.withAlphaComponent(0.22) :
             UIColor.black.withAlphaComponent(0.6)
     }
     
@@ -942,9 +942,9 @@ class CustomVideoPlayerViewController: UIViewController {
         
         if isEnabled {
             // 줌 활성화 시: 번인 방지 버튼 활성화
-            burnInPreventionButton.tintColor = isBurnInPreventionEnabled ? .systemBlue : .white
+            burnInPreventionButton.tintColor = isBurnInPreventionEnabled ? .white : .white.withAlphaComponent(0.7)
             burnInPreventionButton.backgroundColor = isBurnInPreventionEnabled ?
-                UIColor.systemBlue.withAlphaComponent(0.3) :
+                UIColor.white.withAlphaComponent(0.22) :
                 UIColor.black.withAlphaComponent(0.6)
             burnInPreventionButton.isEnabled = true
             burnInPreventionButton.alpha = 1.0

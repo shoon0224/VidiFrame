@@ -36,21 +36,21 @@ class ThumbnailSelectionViewController: UIViewController {
     
     // MARK: - UI Components
     
-    /// 네비게이션 바
-    private let navigationBar = UINavigationBar()
+    private let liquidGlassBackgroundView = LiquidGlassBackgroundView()
     
     /// 제목 레이블
     private let titleLabel = UILabel().then {
         $0.text = "썸네일 선택"
-        $0.font = .systemFont(ofSize: 18, weight: .bold)
+        $0.font = .systemFont(ofSize: 28, weight: .bold)
         $0.textAlignment = .center
+        $0.textColor = .label
     }
     
     /// 설명 레이블
     private let descriptionLabel = UILabel().then {
         $0.text = "원하는 썸네일을 선택하세요"
-        $0.font = .systemFont(ofSize: 14)
-        $0.textColor = .systemGray
+        $0.font = .systemFont(ofSize: 15, weight: .medium)
+        $0.textColor = .secondaryLabel
         $0.textAlignment = .center
     }
     
@@ -62,10 +62,11 @@ class ThumbnailSelectionViewController: UIViewController {
         layout.sectionInset = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .systemBackground
+        collectionView.backgroundColor = .clear
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(ThumbnailCell.self, forCellWithReuseIdentifier: ThumbnailCell.identifier)
+        collectionView.showsVerticalScrollIndicator = false
         return collectionView
     }()
     
@@ -75,29 +76,27 @@ class ThumbnailSelectionViewController: UIViewController {
     }
     
     /// 하단 버튼 컨테이너
-    private let buttonContainer = UIView().then {
-        $0.backgroundColor = .systemBackground
-        $0.layer.shadowColor = UIColor.black.cgColor
-        $0.layer.shadowOffset = CGSize(width: 0, height: -1)
-        $0.layer.shadowOpacity = 0.1
-        $0.layer.shadowRadius = 1
-    }
+    private let buttonContainer = LiquidGlassContainerView(
+        cornerRadius: 24,
+        style: .regular,
+        isInteractive: true,
+        presence: .elevated
+    )
     
     /// 취소 버튼
     private let cancelButton = UIButton(type: .system).then {
         $0.setTitle("취소", for: .normal)
-        $0.titleLabel?.font = .systemFont(ofSize: 16)
-        $0.backgroundColor = .systemGray5
-        $0.layer.cornerRadius = 8
+        $0.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
+        $0.backgroundColor = .clear
+        $0.tintColor = .label
     }
     
     /// 확인 버튼
     private let confirmButton = UIButton(type: .system).then {
         $0.setTitle("확인", for: .normal)
-        $0.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
-        $0.backgroundColor = .systemBlue
-        $0.setTitleColor(.white, for: .normal)
-        $0.layer.cornerRadius = 8
+        $0.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
+        $0.backgroundColor = .clear
+        $0.tintColor = .label
         $0.isEnabled = false
         $0.alpha = 0.5
     }
@@ -185,16 +184,19 @@ class ThumbnailSelectionViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = .systemBackground
         
-        // 서브뷰 추가
+        view.addSubview(liquidGlassBackgroundView)
+        liquidGlassBackgroundView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
         view.addSubview(titleLabel)
         view.addSubview(descriptionLabel)
         view.addSubview(collectionView)
         view.addSubview(loadingIndicator)
         view.addSubview(buttonContainer)
-        buttonContainer.addSubview(cancelButton)
-        buttonContainer.addSubview(confirmButton)
+        buttonContainer.contentView.addSubview(cancelButton)
+        buttonContainer.contentView.addSubview(confirmButton)
         
-        // 레이아웃 설정
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(20)
             $0.leading.trailing.equalToSuperview().inset(20)
@@ -205,37 +207,39 @@ class ThumbnailSelectionViewController: UIViewController {
             $0.leading.trailing.equalToSuperview().inset(20)
         }
         
+        buttonContainer.snp.makeConstraints {
+            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(16)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-12)
+            $0.height.equalTo(72)
+        }
+        
         collectionView.snp.makeConstraints {
             $0.top.equalTo(descriptionLabel.snp.bottom).offset(10)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(buttonContainer.snp.top)
+            $0.bottom.equalTo(buttonContainer.snp.top).offset(-8)
         }
         
         loadingIndicator.snp.makeConstraints {
             $0.center.equalTo(collectionView)
         }
         
-        buttonContainer.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
-            $0.height.equalTo(80)
-        }
-        
         cancelButton.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(20)
-            $0.top.equalToSuperview().offset(16)
+            $0.leading.equalToSuperview().offset(12)
+            $0.centerY.equalToSuperview()
             $0.height.equalTo(48)
-            $0.width.equalTo(80)
+            $0.width.equalTo(88)
         }
         
         confirmButton.snp.makeConstraints {
-            $0.trailing.equalToSuperview().offset(-20)
-            $0.top.equalToSuperview().offset(16)
+            $0.trailing.equalToSuperview().offset(-12)
+            $0.centerY.equalToSuperview()
             $0.height.equalTo(48)
-            $0.leading.equalTo(cancelButton.snp.trailing).offset(16)
+            $0.leading.equalTo(cancelButton.snp.trailing).offset(12)
         }
         
-        // 버튼 액션 설정
+        LiquidGlass.configureScrollEdges(for: collectionView)
+        LiquidGlass.addBottomScrollEdgeInteraction(to: buttonContainer, scrollView: collectionView)
+        
         cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         confirmButton.addTarget(self, action: #selector(confirmButtonTapped), for: .touchUpInside)
     }
@@ -401,8 +405,9 @@ class ThumbnailCell: UICollectionViewCell {
     private let imageView = UIImageView().then {
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
-        $0.layer.cornerRadius = 8
-        $0.backgroundColor = .systemGray5
+        $0.layer.cornerRadius = 12
+        $0.layer.cornerCurve = .continuous
+        $0.backgroundColor = UIColor.secondarySystemGroupedBackground.withAlphaComponent(0.75)
     }
     
     private let timeLabel = UILabel().then {
@@ -416,16 +421,18 @@ class ThumbnailCell: UICollectionViewCell {
     }
     
     private let selectionOverlay = UIView().then {
-        $0.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.3)
-        $0.layer.cornerRadius = 8
+        $0.backgroundColor = UIColor.label.withAlphaComponent(0.12)
+        $0.layer.cornerRadius = 12
+        $0.layer.cornerCurve = .continuous
         $0.isHidden = true
     }
     
     private let checkmarkImageView = UIImageView().then {
         $0.image = UIImage(systemName: "checkmark.circle.fill")
-        $0.tintColor = .systemBlue
-        $0.backgroundColor = .white
+        $0.tintColor = .label
+        $0.backgroundColor = UIColor.systemBackground.withAlphaComponent(0.85)
         $0.layer.cornerRadius = 12
+        $0.layer.cornerCurve = .continuous
         $0.isHidden = true
     }
     

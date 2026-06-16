@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "VidiFrame_icon.png",
+      "filename" : "VidiFrame_icon_ver2.jpg",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -13,7 +13,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "VidiFrame_icon 1.png",
+      "filename" : "VidiFrame_icon_ver2 1.jpg",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -25,7 +25,7 @@
           "value" : "tinted"
         }
       ],
-      "filename" : "VidiFrame_icon 2.png",
+      "filename" : "VidiFrame_icon_ver2 2.jpg",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"

@@ -20,33 +20,40 @@ class VideoCell: UITableViewCell {
 
     // MARK: - UI Components
     
+    private let glassBackgroundView = LiquidGlassContainerView(
+        cornerRadius: 16,
+        style: .regular,
+        presence: .elevated
+    )
+    
     /// 비디오 썸네일 이미지뷰 (둥근 모서리, 기본 비디오 아이콘 표시)
     private let thumbnailImageView = UIImageView().then {
-        $0.backgroundColor = .lightGray
+        $0.backgroundColor = UIColor.secondarySystemFill.withAlphaComponent(0.5)
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
-        $0.layer.cornerRadius = 8
+        $0.layer.cornerRadius = 10
+        $0.layer.cornerCurve = .continuous
         $0.image = UIImage(systemName: "video.fill")
-        $0.tintColor = .darkGray
+        $0.tintColor = .tertiaryLabel
     }
     
     /// 비디오 파일명을 표시하는 제목 레이블 (최대 2줄)
     private let titleLabel = UILabel().then {
-        $0.font = .systemFont(ofSize: 16, weight: .bold)
-        $0.textColor = .black
+        $0.font = .systemFont(ofSize: 16, weight: .semibold)
+        $0.textColor = .label
         $0.numberOfLines = 2
     }
     
     /// 파일 크기를 표시하는 레이블
     private let fileSizeLabel = UILabel().then {
-        $0.font = .systemFont(ofSize: 12, weight: .regular)
-        $0.textColor = .gray
+        $0.font = .systemFont(ofSize: 13, weight: .regular)
+        $0.textColor = .secondaryLabel
     }
     
     /// 파일 생성 날짜를 표시하는 레이블
     private let dateLabel = UILabel().then {
-        $0.font = .systemFont(ofSize: 12, weight: .regular)
-        $0.textColor = .gray
+        $0.font = .systemFont(ofSize: 13, weight: .regular)
+        $0.textColor = .secondaryLabel
     }
     
     /// 제목과 정보를 세로로 배치하는 메인 스택뷰
@@ -69,13 +76,8 @@ class VideoCell: UITableViewCell {
     /// 옵션 버튼 (세로 점 3개)
     private let optionsButton = UIButton(type: .system).then {
         $0.setImage(UIImage(systemName: "ellipsis"), for: .normal)
-        $0.tintColor = .systemGray
-        $0.backgroundColor = .systemBackground
-        $0.layer.cornerRadius = 15
-        $0.layer.shadowColor = UIColor.black.cgColor
-        $0.layer.shadowOffset = CGSize(width: 0, height: 1)
-        $0.layer.shadowOpacity = 0.1
-        $0.layer.shadowRadius = 2
+        $0.tintColor = .secondaryLabel
+        $0.backgroundColor = .clear
     }
     
     /// 옵션 버튼 콜백 클로저
@@ -106,44 +108,43 @@ class VideoCell: UITableViewCell {
         backgroundColor = .clear
         selectionStyle = .none
         
-        // 스택뷰 구성 - 파일 크기와 날짜를 가로로 배치
         infoStackView.addArrangedSubview(fileSizeLabel)
         infoStackView.addArrangedSubview(dateLabel)
         
-        // 메인 스택뷰 구성 - 제목과 정보를 세로로 배치
         stackView.addArrangedSubview(titleLabel)
         stackView.addArrangedSubview(infoStackView)
         
-        // 셀 콘텐츠 뷰에 서브뷰 추가
-        contentView.addSubview(thumbnailImageView)
-        contentView.addSubview(stackView)
-        contentView.addSubview(optionsButton)
+        contentView.addSubview(glassBackgroundView)
+        glassBackgroundView.contentView.addSubview(thumbnailImageView)
+        glassBackgroundView.contentView.addSubview(stackView)
+        glassBackgroundView.contentView.addSubview(optionsButton)
         
-        // 옵션 버튼 액션 설정
         optionsButton.addTarget(self, action: #selector(optionsButtonTapped), for: .touchUpInside)
         
-        // 썸네일 이미지뷰 제약 조건 - 가로/세로 모드 모두 대응
+        glassBackgroundView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(5)
+            $0.bottom.equalToSuperview().offset(-5)
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+        
         thumbnailImageView.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(16)
+            $0.leading.equalToSuperview().offset(14)
             $0.top.greaterThanOrEqualToSuperview().offset(12)
             $0.bottom.lessThanOrEqualToSuperview().offset(-12)
             $0.centerY.equalToSuperview()
             $0.width.height.equalTo(60)
         }
         
-        // 옵션 버튼 제약 조건 - 우측에 고정, 충분한 터치 영역 확보
         optionsButton.snp.makeConstraints {
-            $0.trailing.equalToSuperview().offset(-16)
+            $0.trailing.equalToSuperview().offset(-14)
             $0.centerY.equalToSuperview()
             $0.width.height.equalTo(32)
         }
         
-        // 텍스트 스택뷰 제약 조건 - 가로 모드에서도 적절한 여백 유지
         stackView.snp.makeConstraints {
             $0.leading.equalTo(thumbnailImageView.snp.trailing).offset(12)
             $0.trailing.equalTo(optionsButton.snp.leading).offset(-12)
             $0.centerY.equalToSuperview()
-            // 상하 여백 제한으로 컨텐츠가 잘리지 않도록 보장
             $0.top.greaterThanOrEqualToSuperview().offset(8)
             $0.bottom.lessThanOrEqualToSuperview().offset(-8)
         }
@@ -160,10 +161,8 @@ class VideoCell: UITableViewCell {
         fileSizeLabel.text = video.formattedFileSize
         dateLabel.text = video.formattedCreatedDate
         
-        // 현재 비디오 URL 저장 (셀 재사용 충돌 방지)
         currentVideoURL = video.url
         
-        // 기본 아이콘으로 초기화 후 썸네일 로드
         thumbnailImageView.image = UIImage(systemName: "video.fill")
         loadThumbnail(for: video.url)
     }
@@ -199,12 +198,10 @@ class VideoCell: UITableViewCell {
         ThumbnailCacheManager.shared.getThumbnail(for: url) { [weak self] thumbnailImage in
             guard let self = self else { return }
             
-            // 셀이 재사용되지 않았는지 확인
             if let currentURL = self.currentVideoURL, currentURL == url {
                 if let thumbnailImage = thumbnailImage {
                     self.thumbnailImageView.image = thumbnailImage
                 } else {
-                    // 썸네일 생성 실패 시 기본 아이콘 유지
                     self.thumbnailImageView.image = UIImage(systemName: "video.fill")
                 }
             }
@@ -220,13 +217,9 @@ class VideoCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        // 썸네일 로딩 충돌 방지를 위해 URL 초기화
         currentVideoURL = nil
-        
-        // 콜백 클로저 초기화
         onOptionsButtonTapped = nil
         
-        // UI 요소 초기화
         thumbnailImageView.image = UIImage(systemName: "video.fill")
         titleLabel.text = nil
         fileSizeLabel.text = nil
